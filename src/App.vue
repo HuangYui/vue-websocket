@@ -1,19 +1,31 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    {{test}}
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import stompManager from './stompManager' // 注意文件地址
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
+  data() {
+    return {
+      test: "1"
+    };
+  },
+  created() {
+    stompManager.init({});
+    this.onchange();
+  },
+  methods: {
+    onchange(){
+     // 订阅
+     this.$socket.subscribe('/toAll', (response)=>{
+          this.test = JSON.parse(response.body)
+     })
+    }
   }
-}
+};
 </script>
 
 <style>
